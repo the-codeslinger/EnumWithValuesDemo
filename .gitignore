@@ -1,0 +1,13 @@
+.vs/
+.idea/
+.gradle/
+build/
+
+*.class
+*.exe
+*.dll
+
+bin/
+obj/
+
+target/
