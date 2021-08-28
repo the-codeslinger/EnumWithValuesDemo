@@ -5,9 +5,14 @@ namespace EnumWithValuesDemo
 {
     public sealed class CharacterReplacementCode
     {
-        public static readonly CharacterReplacementCode Colon = new CharacterReplacementCode(":", "&58;");
-        public static readonly CharacterReplacementCode Pound = new CharacterReplacementCode("#", "&35;");
-        public static readonly CharacterReplacementCode QuestionMark = new CharacterReplacementCode("?", "&63;");
+        public enum Type
+        {
+            Colon, Pound, QuestionMark
+        }
+
+        public static readonly CharacterReplacementCode Colon = new CharacterReplacementCode(Type.Colon, ":", "&58;");
+        public static readonly CharacterReplacementCode Pound = new CharacterReplacementCode(Type.Pound, "#", "&35;");
+        public static readonly CharacterReplacementCode QuestionMark = new CharacterReplacementCode(Type.QuestionMark, "?", "&63;");
 
         public static IEnumerable<CharacterReplacementCode> Values
         {
@@ -19,10 +24,15 @@ namespace EnumWithValuesDemo
             }
         }
 
+        public static implicit operator CharacterReplacementCode.Type(CharacterReplacementCode replacementCode) 
+            => replacementCode.EnumType;
+
+        public Type EnumType { get; private set; }
         public string Character { get; private set; }
         public string Replacement { get; private set; }
 
-        CharacterReplacementCode(string character, string code) => (Character, Replacement) = (character, code);
+        CharacterReplacementCode(Type type, string character, string code) 
+            => (EnumType, Character, Replacement) = (type, character, code);
 
         public override string ToString()
         {
@@ -36,14 +46,14 @@ namespace EnumWithValuesDemo
         static void Main(string[] args)
         {
             foreach (var code in CharacterReplacementCode.Values) {
-                switch (code) {
-                    case CharacterReplacementCode { Character: ":"  }:
+                switch ((CharacterReplacementCode.Type)code) {
+                    case CharacterReplacementCode.Type.Colon:
                         Console.WriteLine("COLON: " + code);
                         break;
-                    case CharacterReplacementCode { Character: "#" }:
+                    case CharacterReplacementCode.Type.Pound:
                         Console.WriteLine("POUND: " + code);
                         break;
-                    case CharacterReplacementCode { Character: "?" }:
+                    case CharacterReplacementCode.Type.QuestionMark:
                         Console.WriteLine("QUESTION: " + code);
                         break;
                 }
